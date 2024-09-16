@@ -8,8 +8,8 @@ import {
 } from 'kysely'
 
 export interface Database {
-  person: PersonTable
-  pet: PetTable
+  persons: PersonTable
+  pets: PetTable
 }
 
 // This interface describes the `person` table to Kysely. Table

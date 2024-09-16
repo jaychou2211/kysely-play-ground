@@ -3,14 +3,14 @@ import { PersonUpdate, Person, NewPerson } from './types'
 
 export async function findPersonById(id: number) {
   return await db
-    .selectFrom('person')
+    .selectFrom('persons')
     .where('id', '=', id)
     .selectAll()
     .executeTakeFirst()
 }
 
 export async function findPeople(criteria: Partial<Person>) {
-  let query = db.selectFrom('person')
+  let query = db.selectFrom('persons')
 
   if (criteria.id) {
     query = query.where('id', '=', criteria.id) // Kysely is immutable, you must re-assign!
@@ -41,7 +41,7 @@ export async function findPeople(criteria: Partial<Person>) {
 
 export async function updatePerson(id: number, updateWith: PersonUpdate) {
   await db
-    .updateTable('person')
+    .updateTable('persons')
     .set(updateWith)
     .where('id', '=', id)
     .execute()
@@ -49,7 +49,7 @@ export async function updatePerson(id: number, updateWith: PersonUpdate) {
 
 export async function createPerson(person: NewPerson) {
   return await db
-    .insertInto('person')
+    .insertInto('persons')
     .values(person)
     .returningAll()
     .executeTakeFirstOrThrow()
@@ -57,7 +57,7 @@ export async function createPerson(person: NewPerson) {
 
 export async function deletePerson(id: number) {
   return await db
-    .deleteFrom('person')
+    .deleteFrom('persons')
     .where('id', '=', id)
     .returningAll()
     .executeTakeFirst()

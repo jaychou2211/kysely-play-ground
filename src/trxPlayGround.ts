@@ -3,7 +3,7 @@ import { db } from "./database"
 
 db.transaction().execute(async trx => {
   const jennifer = await trx
-    .insertInto('person')
+    .insertInto('persons')
     .values({
       first_name: 'Jennifer',
       last_name: 'Aniston',
@@ -19,7 +19,7 @@ db.transaction().execute(async trx => {
     .executeTakeFirstOrThrow();
 
   await trx
-    .insertInto('pet')
+    .insertInto('pets')
     .values({
       owner_id: jennifer.id,
       name: 'Catto',
@@ -29,16 +29,16 @@ db.transaction().execute(async trx => {
     .executeTakeFirst();
 
   return trx
-    .selectFrom('person')
-    .selectAll('person')
+    .selectFrom('persons')
+    .selectAll('persons')
     .select((eb) => [
       jsonArrayFrom(
-        eb.selectFrom('pet')
-          .select(['pet.id', 'pet.name', 'pet.species'])
-          .whereRef('pet.owner_id', '=', 'person.id')
+        eb.selectFrom('pets')
+          .select(['pets.id', 'pets.name', 'pets.species'])
+          .whereRef('pets.owner_id', '=', 'persons.id')
       ).as('pets'),
     ])
-    .where('person.id', '=', jennifer.id)
+    .where('persons.id', '=', jennifer.id)
     .executeTakeFirstOrThrow();
 })
   .then(console.log)
